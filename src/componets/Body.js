@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 // import restaurantData from "../Utils/restaurant_data"
-import Restaurant_card from '../sub__components/Restaurant_card'
+import Restaurant_card, { WithPromoted } from '../sub__components/Restaurant_card'
 import Shimmer from './Shimmer'
 import useOnlineStatus from '../Utils/useOnlineStatus'
 
@@ -29,12 +29,17 @@ const Body__wrapper = styled.main`
         `
 const Body = () => {
 
+    const RestoWithPromoted = WithPromoted(Restaurant_card);
     const [listOfRestaurants, setlistOfRestaurants] = useState([]);
     const [filtered_Restaurants, setfiltered_Restaurants] = useState([]);
     const [searchText, setSearchText] = useState("");
 
+
+
     const onlineStatus = useOnlineStatus();
 
+
+    // console.log(listOfRestaurants);
     function filterTopRated() {
         const temp_ListOfRestaurants = listOfRestaurants.filter((curElem) => curElem.avgRating > 4)
         setfiltered_Restaurants(temp_ListOfRestaurants);
@@ -88,7 +93,7 @@ const Body = () => {
         <Body__wrapper>
             <div className='Filter_conatiner'>
                 <div className='left'>
-                    <button className='filter-btn' onClick={filterTopRated} >Top rated restaurant</button>
+                    <button className='filter-btn bg-orange-300 rounded-lg px-3 text-white py-2 ' onClick={filterTopRated} >Top rated restaurant</button>
                     <button className='filter-btn' onClick={allData} >Relevance</button>
                 </div>
                 <div className='right'>
@@ -96,9 +101,9 @@ const Body = () => {
                 </div>
             </div>
             {
-                filtered_Restaurants.length === 0 ? (<Shimmer />) : (<div className='grid grid-four-column res_container'>
+                filtered_Restaurants.length === 0 ? (<Shimmer />) : (<div className='grid grid-four-column res_container '>
                     {
-                        filtered_Restaurants.map((restaurant) => <Restaurant_card key={restaurant.id} restaurant={restaurant} />)
+                        filtered_Restaurants.map((restaurant) => restaurant.promoted ? <RestoWithPromoted key={restaurant.id} restaurant={restaurant} /> : <Restaurant_card key={restaurant.id} restaurant={restaurant} />)
                     }
                 </div>)
             }

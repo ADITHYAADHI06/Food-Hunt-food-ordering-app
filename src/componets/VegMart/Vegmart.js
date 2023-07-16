@@ -2,7 +2,7 @@ import React from 'react'
 
 const Vegmart = () => {
     return (
-        <div>Vegmart it has 100 components</div>
+        <div className='bg-red-800 text-7xl'>Vegmart it has 100 components</div>
     )
 }
 

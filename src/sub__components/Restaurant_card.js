@@ -86,4 +86,18 @@ const Restaurant_card = ({ restaurant }) => {
         </Link>
     )
 }
+
+export const WithPromoted = (Restaurant_card) => {
+    return (props) => {
+        return (
+            <div className='relative'>
+                <span className='absolute left-8 px-3 py-1 rounded-md top-10 text-white bg-black'>Promoted</span>
+                <Restaurant_card {...props} />
+            </div>
+        )
+
+    }
+}
+
+
 export default Restaurant_card

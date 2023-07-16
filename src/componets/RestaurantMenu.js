@@ -9,9 +9,12 @@ import { RiMoneyCnyCircleLine } from 'react-icons/ri';
 import { AiFillStar } from 'react-icons/ai';
 import { CgToggleSquareOff } from 'react-icons/cg';
 
-import RecommendedComp from '../sub__components/RecommendedComp';
+// import RecommendedComp from '../sub__components/RecommendedComp';
 
 import useCompleteSingleRestorentData from "../Utils/useCompleteSingleRestorentData"
+import Resto_Catogerys from '../sub__components/Restorent_Catogerys';
+import Restorent_Catogerys from '../sub__components/Restorent_Catogerys';
+
 
 
 const Menu__Wrapper = styled.main` 
@@ -174,98 +177,10 @@ gap: 2rem;
         font-size: 2rem;
     }
 }
-hr{
-    margin-bottom: 3rem;
-    margin-top: 2rem;
 
-}
-.Recommended_wrapper{
-    /* margin-bottom: 1rem; */
-    border-bottom: 16px solid #f1f1f6;
-    margin-bottom: 2rem;
-    h4{
-        font-size: 1.8rem;
-        padding-bottom: 1.5rem;
-    }
-    .Main_menu_wrapper{
-        padding-bottom: 1.5rem;
-        .Menu_cards{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            
-            span{
-            font-size: 2rem;
-            }
-            .veg{
-            color: green;
-            }
-            .nonVeg{
-            color: red;
-            }
-            h2{
-                margin-top: 0.4rem;
-                margin-right: 0.4rem;
-                margin-bottom: .5rem;
-                font-size: 1.8rem;
-                font-weight: 600;
-                color: #3e4152;
-            }
-            h4{
-              font-size: 1.4rem;
-              margin-bottom: 0rem !important;
-              padding-bottom: 1rem;
-            }
-            p{
-                font-size: 1rem;
-            }
-            .right {
-                width: 10.8rem;
-                height: 9.6rem;
-            -o-object-fit: cover;
-            object-fit: cover;
-            border-radius: 6px;
-            position: relative;
-            img{
-                width: 100%;
-                height: 100%;
-            }
-            .Cart_button{
-                position: absolute;
-                bottom: -.8rem;
-                right: 29%;
-                font-size: 1.8rem;
-                font-weight: 600;
-                color: #60b246;
-                border-radius: .7rem;
-                background-color: white;
-                padding: .4rem 1.8rem;
-                border: none;
-                outline: none;
-                cursor: pointer;
-            }
-            .big_button{
-                border: 1px solid black;
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                font-size: 1.8rem;
-                font-weight: 600;
-                color: #60b246;
-                border-radius: .7rem;
-                background-color: white;
-                padding: .4rem 1.8rem;
-                outline: none;
-                cursor: pointer;   
-            }
-            }
-        }
-    }
+ 
 
-}
 .vegToggleButton{
-
     color: green !important;
 }
         `
@@ -273,33 +188,26 @@ const RestaurantMenu = () => {
 
     const { resid } = useParams();
 
-    const completeSingleRestorentData = useCompleteSingleRestorentData(resid);
-    console.log("data " + completeSingleRestorentData);
-    // const [vegOnly, setVegOnly] = useState(false);
-    const [menuStates, setMenuStates] = useState({ recommended: true, secMenuVariable: false, NonvegStarter: false })
 
-    if (completeSingleRestorentData === null) return <Shimmer />
+    const completeSingleRestorentData = useCompleteSingleRestorentData(resid);
 
     const restorentInformation = completeSingleRestorentData?.cards[0]?.card?.card?.info;
-
-    console.log("reco renders");
-
-    let recommended = completeSingleRestorentData?.cards[3]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card?.itemCards;
-    // let recommended_array=[];
-    // if (completeSingleRestorentData) {
-    //     recommended_array = recommended ? recommended.map((c) => { return c?.card?.info; }) : [];
-    // }
+    const MenuCatogerys = completeSingleRestorentData?.cards[3]?.groupedCard?.cardGroupMap?.REGULAR?.cards?.filter((curElem) => { return curElem?.card?.card?.["@type"] === 'type.googleapis.com/swiggy.presentation.food.v2.ItemCategory'; })
+    // console.log(MenuCatogerys);
 
 
+    const [vegOnly, setVegOnly] = useState(false);
+    const [menuStates, setMenuStates] = useState({ recommended: true, secMenuVariable: false, NonvegStarter: false })
+    // if (completeSingleRestorentData === null) return <Shimmer />
 
     // if (vegOnly) {
     //     recommended_array = recommended ? recommended.map((c) => { return c?.card?.info; }) : [];
     // }
 
-    // setrecommendedMenu(recommended_array);
 
-
-    return (
+    return !completeSingleRestorentData ? (
+        <Shimmer />
+    ) : (
         <Menu__Wrapper>
             {
                 console.log("body renders")
@@ -350,24 +258,24 @@ const RestaurantMenu = () => {
 
 
                     </div>
-                    {/* <div className='Veg_Only_wrapper'><h4>Veg Only</h4>{vegOnly ? <CgToggleSquareOff onClick={() => { setVegOnly(false); }} className='icon vegToggleButton' /> : <CgToggleSquare onClick={() => { setVegOnly(true) }} className='icon' />}</div>
-                    <hr /> */}
-
-                    {/* {
-                        recommended_array ? <div className='Recommended_wrapper' onClick={() => {
-                            menuStates.recommended ? setMenuStates((prevState) => ({ ...prevState, recommended: false })) : setMenuStates((prevState) => ({ ...prevState, recommended: true }));
-                        }}><h4>Recommended ({recommended_array.length})</h4>
-                            {
-                                menuStates.recommended && recommended_array ?
-                                    (
-                                        recommended_array.map((c, i) => < RecommendedComp recommendedMenu={c} key={c.id} />)
-                                    ) : <div></div>
-                            } </div> : <Shimmer />
-                    } */}
+                    <div className='Veg_Only_wrapper'><h4>Veg Only</h4>{vegOnly ? <CgToggleSquareOff onClick={() => { setVegOnly(false); }} className='icon vegToggleButton' /> : <CgToggleSquare onClick={() => { setVegOnly(true) }} className='icon' />}</div>
+                    <hr />
 
 
 
 
+                    {/* RecommendedMenu ? */}
+
+                    <div className='Restorent_Menu'>
+                        {
+                            MenuCatogerys ? MenuCatogerys.map((curElem, i) => {
+                                const { title, itemCards } = curElem?.card?.card;
+                                return (
+                                    <Restorent_Catogerys title={title} itemCards={itemCards} />
+                                )
+                            }) : <Shimmer />
+                        }
+                    </div>
                 </div>
             </div>
         </Menu__Wrapper>
@@ -382,6 +290,3 @@ export default RestaurantMenu
 
 
 
-// SetrecommendedMenu(recommended_array);
-// setsecondMenu_array(secMenu_array);
-// SetcompleterestorentInformation(dataJson);
