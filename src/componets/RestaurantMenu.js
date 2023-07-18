@@ -187,6 +187,8 @@ gap: 2rem;
 const RestaurantMenu = () => {
 
     const { resid } = useParams();
+    const [vegOnly, setVegOnly] = useState(false);
+    const [showItemCardIndex, setShowItemCardindex] = useState(0);
 
 
     const completeSingleRestorentData = useCompleteSingleRestorentData(resid);
@@ -194,9 +196,9 @@ const RestaurantMenu = () => {
     const restorentInformation = completeSingleRestorentData?.cards[0]?.card?.card?.info;
     const MenuCatogerys = completeSingleRestorentData?.cards[3]?.groupedCard?.cardGroupMap?.REGULAR?.cards?.filter((curElem) => { return curElem?.card?.card?.["@type"] === 'type.googleapis.com/swiggy.presentation.food.v2.ItemCategory'; })
     // console.log(MenuCatogerys);
+    // MenuCatogerys= vegOnly ? MencuCatogerys.filter((c)=>{return   })
 
 
-    const [vegOnly, setVegOnly] = useState(false);
     const [menuStates, setMenuStates] = useState({ recommended: true, secMenuVariable: false, NonvegStarter: false })
     // if (completeSingleRestorentData === null) return <Shimmer />
 
@@ -263,15 +265,16 @@ const RestaurantMenu = () => {
 
 
 
-
                     {/* RecommendedMenu ? */}
 
                     <div className='Restorent_Menu'>
                         {
-                            MenuCatogerys ? MenuCatogerys.map((curElem, i) => {
+                            MenuCatogerys ? MenuCatogerys.map((curElem, index) => {
                                 const { title, itemCards } = curElem?.card?.card;
+                                let items = itemCards;
+                                items = itemCards && vegOnly ? itemCards.filter((c) => { if (c?.card?.info?.isVeg === 1) { return c } }) : itemCards;
                                 return (
-                                    <Restorent_Catogerys title={title} itemCards={itemCards} />
+                                    <Restorent_Catogerys setShowItemCardindex={() => { setShowItemCardindex(index) }} ShowItemCard={index === showItemCardIndex ? true : false} title={title} itemCards={items} />
                                 )
                             }) : <Shimmer />
                         }

@@ -3,40 +3,38 @@ import { IoMdRadioButtonOn } from "react-icons/io"
 
 
 const Food = ({ info }) => {
-    const { isVeg, name, price, description, imageId, inStock, variantsV2 } = info;
+    const { isVeg, name, price, description, imageId, defaultPrice, isBestseller, inStock, variantsV2, addons } = info;
 
     const { variantGroups, pricingModels } = variantsV2
     let regularPrice = pricingModels ? pricingModels[0]?.price : 0;
     return (
         <div className=''>
-            <div className='flex justify-between'>
+            <div className='flex justify-between gap-5'>
                 <div className=''>
-                    <span className={isVeg ? 'text-3xl text-green-400' : 'text-3xl text-red-600'}><IoMdRadioButtonOn /></span>
-                    <h2 className='text-2xl font-bold'>{name}</h2>
-                    <h4 className='text-xl font-semibold'>{price ? ` ₹${price / 100}` : ` ₹${regularPrice / 100} `}</h4>
-                    <p className='text-sm'>{description}</p>
+                    <p><IoMdRadioButtonOn className={isVeg ? 'text-3xl text-green-400 mb-2 inline-block' : 'text-3xl text-red-600 mb-2 inline-block'} /><span className='ml-2 text-orange-400 font-semibold'>{isBestseller ? "BEST SELLER" : ""} </span></p>
+                    <h2 className='text-2xl mb-2 font-bold'>{name}</h2>
+                    <h4 className='text-xl mb-4 font-semibold'>{price ? ` ₹${price / 100}` : ` ₹${defaultPrice / 100} `}</h4>
+                    <p className='text-md text-gray-500'>{description}</p>
                 </div>
-                <div className='w-48 relative'>
+                <div className='w-48 h-36  relative'>
                     {
                         imageId ? (
                             <>
-                                <img src={"https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_508,h_320,c_fill/" + imageId} />
-                                <button className='Cart_button absolute px-4 py-2 rounded-md -bottom-2.5 border-2 border-black  left-20 bg-white'>+</button>
+                                <img src={"https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_508,h_320,c_fill/" + imageId} className='w-full h-full ' />
+                                <div className={variantGroups || addons ? " absolute -bottom-16 left-4 " : 'absolute -bottom-10 left-4'}>
+                                    <button className=' px-14 pt-3 pb-4 rounded-md  border-2 border-black   text-green-500 font-semibold text-xl bg-white'>ADD</button>
+                                    {variantGroups || addons ? <p className='text-center'>Customizable</p> : <></>}
+                                </div>
                             </>)
                             : <button className='big_button'>+</button>
                     }
 
+
                 </div>
             </div>
-            <hr className='mb-6 mt-6' />
+            <hr className='mb-6 mt-20' />
         </div>
 
-        // <div className='bg-black m-2 text-white flex justify-between gap-4'>
-        //     <div className='content_side'>{info.name}</div>
-        //     <div className='img_side w-10'>
-        //         <img src="https://upload.wikimedia.org/wikipedia/en/thumb/1/12/Swiggy_logo.svg/2560px-Swiggy_logo.svg.png" alt='img' />
-        //     </div>
-        // </div>
     )
 }
 

@@ -30,6 +30,7 @@ const Body__wrapper = styled.main`
 const Body = () => {
 
     const RestoWithPromoted = WithPromoted(Restaurant_card);
+
     const [listOfRestaurants, setlistOfRestaurants] = useState([]);
     const [filtered_Restaurants, setfiltered_Restaurants] = useState([]);
     const [searchText, setSearchText] = useState("");
