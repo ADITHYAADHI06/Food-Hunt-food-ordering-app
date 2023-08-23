@@ -3,6 +3,10 @@ import styled from 'styled-components'
 import { Link } from "react-router-dom"
 import useOnlineStatus from "../Utils/useOnlineStatus"
 
+//context hook
+import { useContext } from 'react';
+import userContext from '../Utils/context/UserContext';
+
 
 const NavLinks = () => {
     const Nav_Link__wrapper = styled.nav`
@@ -21,16 +25,22 @@ const NavLinks = () => {
 
     const onlineStatus = useOnlineStatus();
 
+
+
+    const data = useContext(userContext)
+    // console.log();
+
     return (
         <Nav_Link__wrapper>
             <ul>
-                <li>Online Status {onlineStatus ? "🟢" : "🔴"} </li>
                 <li><Link to="/">HOME</Link></li>
                 <li><Link to="/vegMart">VegMart</Link></li>
                 <li><Link to="/about">ABOUT</Link></li>
 
                 <li><Link to="/contact">CONTACT</Link></li>
-                <li>CART</li>
+                <li><Link to="/cart">CART</Link></li>
+                <li>{onlineStatus ? "🟢 Online" : "🔴 Offline"} </li>
+                <li>{data.user}</li>
             </ul>
         </Nav_Link__wrapper>
     )

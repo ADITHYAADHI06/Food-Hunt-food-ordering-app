@@ -9,13 +9,8 @@ import { RiMoneyCnyCircleLine } from 'react-icons/ri';
 import { AiFillStar } from 'react-icons/ai';
 import { CgToggleSquareOff } from 'react-icons/cg';
 
-// import RecommendedComp from '../sub__components/RecommendedComp';
-
-import useCompleteSingleRestorentData from "../Utils/useCompleteSingleRestorentData"
-import Resto_Catogerys from '../sub__components/Restorent_Catogerys';
 import Restorent_Catogerys from '../sub__components/Restorent_Catogerys';
-
-
+import useRestorentMenu from "../Utils/useRestorentMenu"
 
 const Menu__Wrapper = styled.main` 
        padding: 3rem 15rem;
@@ -190,30 +185,16 @@ const RestaurantMenu = () => {
     const [vegOnly, setVegOnly] = useState(false);
     const [showItemCardIndex, setShowItemCardindex] = useState(0);
 
+    let resInfo = useRestorentMenu(resid);
 
-    const completeSingleRestorentData = useCompleteSingleRestorentData(resid);
+    if (resInfo === null) { return (<Shimmer />) }
 
-    const restorentInformation = completeSingleRestorentData?.cards[0]?.card?.card?.info;
-    const MenuCatogerys = completeSingleRestorentData?.cards[3]?.groupedCard?.cardGroupMap?.REGULAR?.cards?.filter((curElem) => { return curElem?.card?.card?.["@type"] === 'type.googleapis.com/swiggy.presentation.food.v2.ItemCategory'; })
-    // console.log(MenuCatogerys);
-    // MenuCatogerys= vegOnly ? MencuCatogerys.filter((c)=>{return   })
+    const restorentInformation = resInfo?.cards[0]?.card?.card?.info;
+    const offers = resInfo?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.offers?.map((c) => { return c?.info })
+    const MenuCatogerys = resInfo?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards?.filter((curElem) => { return curElem?.card?.card?.["@type"] === 'type.googleapis.com/swiggy.presentation.food.v2.ItemCategory'; })
 
-
-    const [menuStates, setMenuStates] = useState({ recommended: true, secMenuVariable: false, NonvegStarter: false })
-    // if (completeSingleRestorentData === null) return <Shimmer />
-
-    // if (vegOnly) {
-    //     recommended_array = recommended ? recommended.map((c) => { return c?.card?.info; }) : [];
-    // }
-
-
-    return !completeSingleRestorentData ? (
-        <Shimmer />
-    ) : (
+    return (
         <Menu__Wrapper>
-            {
-                console.log("body renders")
-            }
             <div className='res_container'>
                 {/* top */}
                 <div className='menuTopHeader'>
@@ -234,11 +215,24 @@ const RestaurantMenu = () => {
                             </div>
                         </div>
                         <div className='RestaurantHeader_cost_time_wrapper_'>
-                            <div className='Delivary_Time'><CgTimelapse className='icon' /><span>42 MINS</span></div>
+                            <div className='Delivary_Time'><CgTimelapse className='icon' /><span>{restorentInformation?.sla?.deliveryTime} MINS</span></div>
                             <div className='Cost_for_Two'><RiMoneyCnyCircleLine className='icon' /><span>{restorentInformation.costForTwoMessage}</span></div>
                         </div>
                     </div>
                     <div className='Offers_row_wrapper'>
+
+                        {
+                            offers?.map((offer) => {
+                                const { header, couponCode, description, offerLogo } = offer
+                                return (
+                                    <div className='Offers_boxes'>
+                                        <div className='top'><img src={'https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_28,h_28/' + offerLogo} alt='this is icon' /> <span>{header}</span></div>
+                                        <div className='bottom'><span>{couponCode} | {description}</span></div>
+                                    </div>
+                                )
+                            })
+                        }
+
                         <div className='Offers_boxes'>
                             <div className='top'><img src='https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_28,h_28/rng/md/ads/production/1acdb97aadcb61b323307845bda86535' alt='this is icon' /> <span>20% of upto ₹120</span></div>
                             <div className='bottom'><span>USE FEDERALCC | ABOVE ₹249</span></div>
@@ -247,25 +241,9 @@ const RestaurantMenu = () => {
                             <div className='top'><img src='https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_28,h_28/rng/md/ads/production/1acdb97aadcb61b323307845bda86535' alt='this is icon' /> <span>20% of upto ₹120</span></div>
                             <div className='bottom'><span>USE FEDERALCC | ABOVE ₹249</span></div>
                         </div>
-                        <div className='Offers_boxes'>
-                            <div className='top'><img src='https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_28,h_28/rng/md/ads/production/1acdb97aadcb61b323307845bda86535' alt='this is icon' /> <span>20% of upto ₹120</span></div>
-                            <div className='bottom'><span>USE FEDERALCC | ABOVE ₹249</span></div>
-                        </div>
-                        <div className='Offers_boxes'>
-                            <div className='top'><img src='https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_28,h_28/rng/md/ads/production/1acdb97aadcb61b323307845bda86535' alt='this is icon' /> <span>20% of upto ₹120</span></div>
-                            <div className='bottom'><span>USE FEDERALCC | ABOVE ₹249</span></div>
-                        </div>
-
-
-
-
                     </div>
                     <div className='Veg_Only_wrapper'><h4>Veg Only</h4>{vegOnly ? <CgToggleSquareOff onClick={() => { setVegOnly(false); }} className='icon vegToggleButton' /> : <CgToggleSquare onClick={() => { setVegOnly(true) }} className='icon' />}</div>
                     <hr />
-
-
-
-                    {/* RecommendedMenu ? */}
 
                     <div className='Restorent_Menu'>
                         {

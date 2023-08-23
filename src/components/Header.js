@@ -4,6 +4,8 @@ import Logo from "../sub__components/Logo"
 import NavLinks from "../sub__components/NavLinks"
 
 
+
+
 const Header = () => {
     const MainHeader__wrapper = styled.header`
         padding: 0 15rem;
@@ -15,6 +17,8 @@ const Header = () => {
         position: relative;
         box-shadow:${({ theme }) => theme.colors.header__shadow};
 `;
+
+
 
     return (
         <MainHeader__wrapper>

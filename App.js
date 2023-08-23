@@ -1,4 +1,4 @@
-import React, { Children, Suspense, lazy } from "react";
+import React, { Children, Suspense, lazy, useState } from "react";
 import ReactDOM from "react-dom/client";
 
 // to Provide theme to Application
@@ -11,21 +11,24 @@ import {
     Outlet
 } from "react-router-dom";
 
-import Header from "./src/componets/Header";
-import Body from "./src/componets/Body"
-import Footer from "./src/componets/Footer"
-import ErrorPage from "./src/componets/ErrorPage";
-import About from "./src/componets/About";
-import Contact from "./src/componets/Contact";
-import RestaurantMenu from "./src/componets/RestaurantMenu";
-// import VegMart from "./src/componets/VegMart/Vegmart"
+import Header from "./src/components/Header";
+import Body from "./src/components/Body"
+import Footer from "./src/components/Footer"
+import ErrorPage from "./src/components/ErrorPage";
+import About from "./src/components/About";
+import Contact from "./src/components/Contact";
+import RestaurantMenu from "./src/components/RestaurantMenu";
+import Cart from "./src/components/Cart";
+import userContext from "./src/Utils/context/UserContext";
 
-const VegMart = lazy(() => import("./src/componets/VegMart/Vegmart"))
+const VegMart = lazy(() => import("./src/components/VegMart/Vegmart"))
 
 
 
 // AppLayout component to show: Header, Body, Footer
 const AppLayout = () => {
+
+    const [userName, setUserName] = useState("Adithya")
 
     const theme = {
         colors: {
@@ -51,12 +54,17 @@ const AppLayout = () => {
         },
     };
 
+
     return (
         <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <Header />
-            <Outlet />
-            <Footer />
+            <userContext.Provider value={{ user: userName, setUserName }}>
+                <GlobalStyle />
+                <Header />
+                <Outlet />
+                <userContext.Provider value={{ user: "musk" }}>
+                    <Footer />
+                </userContext.Provider>
+            </userContext.Provider>
         </ThemeProvider>
     );
 };
@@ -82,6 +90,10 @@ const router = createBrowserRouter([
             {
                 path: "/contact",
                 element: <Contact />,
+            },
+            {
+                path: "/cart",
+                element: <Cart />,
             },
             {
                 path: "/restaurantMenu/:resid",
