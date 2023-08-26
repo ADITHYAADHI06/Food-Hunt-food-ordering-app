@@ -23,13 +23,18 @@ import userContext from "./src/Utils/context/UserContext";
 
 const VegMart = lazy(() => import("./src/components/VegMart/Vegmart"))
 
+//! redux
+import { Provider } from "react-redux";
+import appStore from "./src/redux/appStore";
 
 
 // AppLayout component to show: Header, Body, Footer
 const AppLayout = () => {
 
-    const [userName, setUserName] = useState("Adithya")
 
+
+
+    const [userName, setUserName] = useState("Adithya")
     const theme = {
         colors: {
             heading: "rgb(24 24 29)",
@@ -53,19 +58,19 @@ const AppLayout = () => {
             tab: "998px",
         },
     };
-
-
     return (
-        <ThemeProvider theme={theme}>
-            <userContext.Provider value={{ user: userName, setUserName }}>
-                <GlobalStyle />
-                <Header />
-                <Outlet />
-                <userContext.Provider value={{ user: "musk" }}>
-                    <Footer />
+        <Provider store={appStore} >
+            <ThemeProvider theme={theme}>
+                <userContext.Provider value={{ user: userName, setUserName }}>
+                    <GlobalStyle />
+                    <Header />
+                    <Outlet />
+                    <userContext.Provider value={{ user: "musk" }}>
+                        <Footer />
+                    </userContext.Provider>
                 </userContext.Provider>
-            </userContext.Provider>
-        </ThemeProvider>
+            </ThemeProvider>
+        </Provider>
     );
 };
 

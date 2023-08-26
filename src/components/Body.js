@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Display_Main_Restorents from "../components/Display_Main_Restorents"
 import Filter_Section from '../sub__components/Filter_Section'
@@ -38,6 +38,10 @@ const Body = () => {
     // if (listOfRestaurants.length === 0) {
     //     return <Shimmer />
     // }
+
+
+
+
     return (
         <Body__wrapper>
 

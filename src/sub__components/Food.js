@@ -1,5 +1,7 @@
 import React from 'react'
 import { IoMdRadioButtonOn } from "react-icons/io"
+import { useDispatch } from 'react-redux';
+import { addItem } from "../redux/cartSlice"
 
 
 const Food = ({ info }) => {
@@ -7,6 +9,13 @@ const Food = ({ info }) => {
 
     const { variantGroups, pricingModels } = variantsV2
     let regularPrice = pricingModels ? pricingModels[0]?.price : 0;
+
+    const dispatch = useDispatch();
+
+    const handleAddItem = () => {
+        dispatch(addItem(info))
+    }
+
     return (
         <div className=''>
             <div className='flex justify-between gap-5'>
@@ -22,7 +31,7 @@ const Food = ({ info }) => {
                             <>
                                 <img src={"https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_508,h_320,c_fill/" + imageId} className='w-full h-full ' />
                                 <div className={variantGroups || addons ? " absolute -bottom-16 left-4 " : 'absolute -bottom-10 left-4'}>
-                                    <button className=' px-14 pt-3 pb-4 rounded-md  border-2 border-black   text-green-500 font-semibold text-xl bg-white'>ADD</button>
+                                    <button onClick={() => { handleAddItem(info) }} className=' px-14 pt-3 pb-4 rounded-md  border-2 border-black   text-green-500 font-semibold text-xl bg-white'>ADD</button>
                                     {variantGroups || addons ? <p className='text-center'>Customizable</p> : <></>}
                                 </div>
                             </>)

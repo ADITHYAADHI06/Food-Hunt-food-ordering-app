@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react'
 import userContext from '../Utils/context/UserContext';
 
 const Filter_Section = ({ setfiltered_Restaurants, listOfRestaurants }) => {
-    console.log(setfiltered_Restaurants);
     const [searchText, setSearchText] = useState("");
     const [pop, setPop] = useState(false);
 

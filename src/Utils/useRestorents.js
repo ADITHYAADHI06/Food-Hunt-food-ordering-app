@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 const useRestorents = () => {
     const [listOfRestaurants, setlistOfRestaurants] = useState([]);
     const [filtered_Restaurants, setfiltered_Restaurants] = useState([]);
-    console.log(listOfRestaurants);
-    console.log(filtered_Restaurants);
+    // console.log(listOfRestaurants);
+    // console.log(filtered_Restaurants);
 
     const fetchData = async () => {
         try {
